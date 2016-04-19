@@ -168,7 +168,7 @@ den måten så får man ikke feil når man endrer Launch Configuration.
 **NB!** Ikke glem å legg til keypair og Security group.
 
 
-### Auto-scaling group
+### Oppgave 4.4: Auto-scaling group
 
 Helt til slutt skal vi lage en [auto-scaling
 group](https://www.terraform.io/docs/providers/aws/r/autoscaling_group.html)
@@ -180,6 +180,9 @@ som maskinene skal meldes inn i.
 Når du kjører `terraform apply` så auto-scaling groupen blir laget, så skal du
 AWS Console se at det starter opp to maskiner, og du vil etterhvert få opp en
 side i browseren hvis du går inn på URL-en til lastbalansereren.
+
+Prøv gjerne også å logge deg inn på serverene via SSH. IP-adressene finner du i
+AWS Console.
 
 ## Ferdig?
 
