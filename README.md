@@ -4,11 +4,14 @@
 
 * Introduksjon
   * Hvordan funker Terraform
+  * Provider (vi bruker AWS)
   * State-fil (eller lagre annet sted)
   * Resources
   * Varibler og referanser
   * Moduler
-  * Provider (vi bruker AWS)
+    * Bruk
+    * Input
+    * Output
   * Provisioners
 
 
@@ -73,7 +76,8 @@ lage en [route
 table](https://www.terraform.io/docs/providers/aws/r/route_table.html), og så
 [assosiere tabellen med
 subnettet](https://www.terraform.io/docs/providers/aws/r/route_table_association.html).
-Så man skal route `0.0.0.0/0` til internet gatewayen.
+Så man skal route `0.0.0.0/0` til internet gatewayen. Sett `gateway_id` i en
+`route` til ID-en til Internet Gateway-en du lagde i forrige oppgave.
 
 ## Oppgave 4
 

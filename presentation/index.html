@@ -1,0 +1,194 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+        <section>
+          <h1>Terraform</h1>
+        </section>
+
+        <section>
+          <h1>Agenda</h1>
+
+          <ul>
+            <li>Gjennomgang av Terraform</li>
+            <li>Oppgaver</li>
+            <li>Gjennomgang av oppgaver underveis</li>
+          </ul>
+        </section>
+
+        <section>
+          <h1>Hvordan funker Terraform?</h1>
+        </section>
+
+        <section>
+          <h1>State</h1>
+          <h2><code>terraform.tfstate</code></h2>
+        </section>
+
+        <section>
+          <h1>Hva bruker man Terraform til?</h1>
+        </section>
+
+        <section>
+          <h1>Dokumentasjonen er bra!</h1>
+        </section>
+
+        <section>
+          <h2>Provider</h2>
+          <pre><code class="hljs nginx" data-trim>
+provider "aws" {
+    region = "eu-central-1"
+}
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>Resources</h2>
+          <pre><code class="hljs nginx" data-trim>
+resource "aws_vpc" "main" {
+    cidr_block = "10.0.0.0/16"
+    tags {
+        Name = "stian"
+    }
+}
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>Variabler</h2>
+          <pre><code class="hljs nginx" data-trim>
+resource "aws_vpc" "main" {
+    cidr_block = "10.0.0.0/16"
+    tags {
+        Name = "stian"
+    }
+}
+
+resource "aws_internet_gateway" "gw" {
+    vpc_id = "${aws_vpc.main.id}"
+}
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>Funksjoner</h2>
+          <pre><code class="hljs nginx" data-trim>
+resource "aws_key_pair" "key" {
+    key_name = "stian_key"
+    public_key = "${file("terrform-workshop.pub")}"
+}
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>Moduler</h2>
+          <pre><code class="hljs nginx" data-trim>
+module "appservers" {
+    source = "./appservers"
+    vpc_id = "${aws_vpc.main.id}"
+}
+          </code></pre>
+
+          <p>Registrer modulen</p>
+
+          <pre><code class="hljs sh" data-trim>
+$ terraform get
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>Moduler</h2>
+          <p>I fila <code>appservers/main.tf</code></p>
+
+          <pre><code class="hljs nginx" data-trim>
+variable "vpc_id" {}
+
+resource "aws_security_group" "lb" {
+    vpc_id = "${var.vpc_id}"
+    ingress {
+        ...
+    }
+    egress {
+        ...
+    }
+}
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>Moduler</h2>
+          <pre><code class="hljs nginx" data-trim>
+output "lb" {
+    value = "${aws_elb.lb.dns_name}"
+}
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>Output</h2>
+          <pre><code class="hljs nginx" data-trim>
+output "lb" {
+    value = "${module.appservers.lb}"
+}
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>Provisioners</h2>
+          <pre><code class="hljs nginx" data-trim>
+ resource "aws_instance" "web" {
+    ...
+    provisioner "remote-exec" {
+        inline = [
+        "puppet apply",
+        "consul join ${aws_instance.web.private_ip}"
+        ]
+    }
+}         </code></pre>
+        </section>
+
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
