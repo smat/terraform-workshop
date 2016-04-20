@@ -24,7 +24,7 @@ IAM, finn brukeren din under "Users", velg Security Credentials, og "Create
 Access Key". Last ned fila, så du er sikker på å ikke miste keyene.
 
 Hvis du bruker din egen konto, lag en bruker under "Users" først, og gi
-brukeren nødvendig tilganger.
+brukeren nødvendig tilganger (man kan godt bruke full admin i workshoppen).
 
 Neste steg er å sette opp miljøvariabler med Access Key-en, slik at Terraform
 kan logge seg på AWS.  Dette gjøres ved å sette `AWS_ACCESS_KEY_ID` og
