@@ -20,8 +20,9 @@
 Her skal vi sette opp Terraform for å bruke den med AWS.
 
 Gå inn i AWS-konsollet, og generer en "Access Key" på brukeren din. Gå inn i
-IAM, finn brukeren din under "Users", velg Security Credentials, og "Create
-Access Key". Last ned fila, så du er sikker på å ikke miste keyene.
+Identity and Access Management (IAM), finn brukeren din under "Users", velg
+Security Credentials, og "Create Access Key". Last ned fila, så du er sikker på
+å ikke miste keyene.
 
 Hvis du bruker din egen konto, lag en bruker under "Users" først, og gi
 brukeren nødvendig tilganger (man kan godt bruke full admin i workshoppen).
@@ -37,6 +38,10 @@ export AWS_SECRET_ACCESS_KEY="<din secret key>"
 ```
 
 ## Oppgave 2: VPC
+
+Det første man må gjøre er å definere opp en [provider for
+AWS.](https://www.terraform.io/docs/providers/aws/index.html). Her kan man
+sette opp hvilken region man vil ha som default.
 
 Vi begynner med å lage en [VPC i Terraform](https://www.terraform.io/docs/providers/aws/r/vpc.html).
 Bruk `10.0.0.0/16` som `cidr_block`, og tag med ditt eget navn som `Name`, så
