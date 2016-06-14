@@ -30,22 +30,22 @@
         </section>
 
         <section>
-          <h1>Agenda</h1>
-
-          <ul>
-            <li>Gjennomgang av Terraform</li>
-            <li>Oppgaver</li>
-            <li>Gjennomgang av oppgaver underveis</li>
-          </ul>
-        </section>
-
-        <section>
           <h1>Hvordan funker Terraform?</h1>
         </section>
 
         <section>
-          <h1>State</h1>
-          <h2><code>terraform.tfstate</code></h2>
+          <p><code>main.tf</code></p>
+        </section>
+
+        <section>
+          <ul>
+            <li><code>terraform plan</code></li>
+            <li><code>terraform apply</code></li>
+          </ul>
+        </section>
+
+        <section>
+          <p><code>terraform.tfstate</code></p>
         </section>
 
         <section>
@@ -54,6 +54,17 @@
 
         <section>
           <h1>Dokumentasjonen er bra!</h1>
+          <p><a href="http://www.terraform.io/docs/">www.terraform.io/docs/</a></p>
+        </section>
+
+        <section>
+          <h1>Nyttige lenker</h1>
+          <ul>
+            <li><a href="https://www.terraform.io/docs/providers/aws/r/instance.html">aws_instance</a></li>
+            <li><a href="https://www.terraform.io/docs/providers/aws/r/key_pair.html">aws_key_pair (SSH-nøkkel)</a></li>
+            <li><a href="https://www.terraform.io/docs/providers/aws/r/security_group.html">aws_security_group</a></li>
+            <li><a href="https://www.terraform.io/docs/providers/aws/r/elb.html">aws_elb</a></li>
+          </ul>
         </section>
 
         <section>
@@ -68,10 +79,11 @@ provider "aws" {
         <section>
           <h2>Resources</h2>
           <pre><code class="hljs nginx" data-trim>
-resource "aws_vpc" "main" {
-    cidr_block = "10.0.0.0/16"
+resource "aws_instance" "web" {
+    ami = "ami-408c7f28"
+    instance_type = "t1.micro"
     tags {
-        Name = "stian"
+        Name = "HelloWorld"
     }
 }
           </code></pre>
@@ -80,15 +92,18 @@ resource "aws_vpc" "main" {
         <section>
           <h2>Variabler</h2>
           <pre><code class="hljs nginx" data-trim>
-resource "aws_vpc" "main" {
-    cidr_block = "10.0.0.0/16"
-    tags {
-        Name = "stian"
-    }
+resource "aws_key_pair" "key" {
+  key_name = "stian_key"
+  public_key = "ssh-rsa AAAAB..."
 }
 
-resource "aws_internet_gateway" "gw" {
-    vpc_id = "${aws_vpc.main.id}"
+resource "aws_instance" "web" {
+    ami = "ami-408c7f28"
+    instance_type = "t1.micro"
+    key_name = "${aws_key_pair.deployer.key_name}"
+    tags {
+        Name = "HelloWorld"
+    }
 }
           </code></pre>
         </section>
@@ -105,53 +120,14 @@ resource "aws_key_pair" "key" {
 
         <section>
           <h2>Moduler</h2>
-          <pre><code class="hljs nginx" data-trim>
-module "appservers" {
-    source = "./appservers"
-    vpc_id = "${aws_vpc.main.id}"
-}
-          </code></pre>
-
-          <p>Registrer modulen</p>
-
-          <pre><code class="hljs sh" data-trim>
-$ terraform get
-          </code></pre>
-        </section>
-
-        <section>
-          <h2>Moduler</h2>
-          <p>I fila <code>appservers/main.tf</code></p>
-
-          <pre><code class="hljs nginx" data-trim>
-variable "vpc_id" {}
-
-resource "aws_security_group" "lb" {
-    vpc_id = "${var.vpc_id}"
-    ingress {
-        ...
-    }
-    egress {
-        ...
-    }
-}
-          </code></pre>
-        </section>
-
-        <section>
-          <h2>Moduler</h2>
-          <pre><code class="hljs nginx" data-trim>
-output "lb" {
-    value = "${aws_elb.lb.dns_name}"
-}
-          </code></pre>
+          <p>Ikke tid til i dag</p>
         </section>
 
         <section>
           <h2>Output</h2>
           <pre><code class="hljs nginx" data-trim>
 output "lb" {
-    value = "${module.appservers.lb}"
+    value = "${aws_instance.web.public_ip}"
 }
           </code></pre>
         </section>
