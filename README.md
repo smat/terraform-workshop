@@ -150,11 +150,15 @@ Group](https://www.terraform.io/docs/providers/aws/r/security_group.html) for å
 kontrollere hvilke porter som er tilgjengelig. Maskinene vi skal sette opp
 trenger port `22` (så vi kan bruke SSH inn) tilgjengelig fra overalt
 (`0.0.0.0/0`), og port `80` (så lastbalansereren får tilgang til webappen)
-tilgjengelig for lastbalansereren.  Man kan bruke
+tilgjengelig for lastbalansereren. Webappen skal kun være tilgjengelig for
+lastbalanseren, og ikke hele verden.  Man kan bruke en security group som
+source, istedenfor en IP-adresse i AWS. Tips er derfor å bruke
 [`source_security_group_id`](https://www.terraform.io/docs/providers/aws/r/elb.html#source_security_group_id)
 som er en variabel fra lastbalansereren, for å angi tilgang fra
-lastbalansereren uten å måtte oppgi IP. Husk å spesifisere VPC-ID på den nye
-Security Group-en, siden SG-er er tilordnet en VPC.
+lastbalansereren uten å måtte oppgi IP.
+
+Husk å spesifisere VPC-ID på den nye Security Group-en, siden SG-er er
+tilordnet en VPC.
 
 
 ### Oppgave 4.3: Launch configuration
