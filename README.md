@@ -72,7 +72,8 @@ Nå skal vi sette opp to [subnet i
 VPC-en](https://www.terraform.io/docs/providers/aws/r/subnet.html) vår. Husk å
 sette `map_public_ip_on_launch` til true, så maskinene i subnettet får public
 IP. Vi kommer bare til å kjøre to subnet i denne workshoppen, og ikke fire som
-har gjort tidligere. La vært subnet være i hver sin `availability_zone`.
+har gjort tidligere. La vært subnet være i hver sin `availability_zone`. La et
+subnet bruke `cidr_block` `10.0.1.0/24` og det andre bruke `10.0.2.1/24`.
 
 Pass også på å legge på en tag på subnettene, så du vet hvilke som er dine.
 
